@@ -101,14 +101,14 @@ class MainActivity : ComponentActivity() {
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
                 ImageButton(
-                    stringId = R.string.control_back,
+                    stringId = R.string.empty,
                     imageId = R.drawable.baseline_keyboard_arrow_left_24
                 ) {
                     currentQuestionIndex--
                     onQuestionChane.invoke()
                 }
                 ImageButton(
-                    stringId = R.string.control_next,
+                    stringId = R.string.empty,
                     imageId = R.drawable.baseline_keyboard_arrow_right_24,
                     reversed = true
                 ) {
