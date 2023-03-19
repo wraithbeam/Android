@@ -67,6 +67,7 @@ class MainActivity : ComponentActivity() {
                 text = stringResource(question.stringId),
                 modifier = Modifier
                     .padding(10.dp)
+//                        3_1
                     .clickable {
                         currentQuestionIndex++
                         onQuestionChane.invoke()
