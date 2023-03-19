@@ -1,3 +1,17 @@
 <resources>
     <string name="app_name">DroidQuest</string>
+    <string name="empty"></string>
+
+    <string name="answer_yes">Да</string>
+    <string name="answer_no">Нет</string>
+    <string name="result_correct">Верно!</string>
+    <string name="result_incorrect">Неверно!</string>
+    <string name="control_next">Далее</string>
+    <string name="control_back">Назад</string>
+
+    <string name="question_1">ОС Андроид основана на ядре Linux?</string>
+    <string name="question_2">Разметка LinearLayout позиционирует свои дочерние элементы в строки и столбцы?</string>
+    <string name="question_3">>Компонент Android-приложения Service предоставляют доступ к данным?</string>
+    <string name="question_4">Ресурсы приложения содержатся в отдельном файле XML?</string>
+    <string name="question_5">AndroidManifest.xml предоставляет системе основную информацию о программе?</string>
 </resources>
