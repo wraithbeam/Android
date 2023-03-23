@@ -1,10 +1,12 @@
 package com.example.droidquest
 
+import android.app.Activity
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.MaterialTheme
@@ -22,14 +24,18 @@ import com.example.droidquest.ui.theme.DroidQuestTheme
 import com.example.droidquest.ui.theme.ImageButton
 import com.example.droidquest.ui.theme.TextButton
 import com.example.droidquest.ui.theme.makeToast
+import kotlin.math.max
+import kotlin.math.min
 
 class MainActivity : ComponentActivity() {
     var currentQuestionIndex = 0
+    var isDeceit = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Log.d(TAG, "onCreate called")
         currentQuestionIndex = savedInstanceState?.getInt(QUESTION_NUMBER_KEY, 0) ?: 0
+        isDeceit = savedInstanceState?.getBoolean(WAS_DECIDED, false) ?: false
         setContent {
             DroidQuestTheme {
                 Surface(
@@ -57,9 +63,9 @@ class MainActivity : ComponentActivity() {
             Question(R.string.question_9, true),
             Question(R.string.question_10, false)
         )
-        var question by remember { mutableStateOf(questions[currentQuestionIndex]) }
-        drawQuestion(question = question) {
-            question = questions[currentQuestionIndex]
+        var currentQuestion by remember { mutableStateOf(questions[currentQuestionIndex]) }
+        drawQuestion(question = currentQuestion) {
+            currentQuestion = questions[currentQuestionIndex]
         }
     }
 
@@ -91,14 +97,20 @@ class MainActivity : ComponentActivity() {
                 TextButton(R.string.answer_yes) {
                     checkAnswer(
                         context = context,
-                        correctAnswer = question.answer,
+                        question = question,
                         userAnswer = true
+                    )
+                }
+                TextButton(R.string.answer_take_in) {
+                    val answer = question.answer
+                    startActivityForResult.launch(
+                        TakeInActivity.newIntent(this@MainActivity, answer)
                     )
                 }
                 TextButton(R.string.answer_no) {
                     checkAnswer(
                         context = context,
-                        correctAnswer = question.answer,
+                        question = question,
                         userAnswer = false
                     )
                 }
@@ -113,7 +125,10 @@ class MainActivity : ComponentActivity() {
                     stringId = R.string.empty,
                     imageId = R.drawable.baseline_keyboard_arrow_left_24
                 ) {
-                    currentQuestionIndex--
+                    question.wasDecided = isDeceit
+                    val prev = currentQuestionIndex - 1
+                    currentQuestionIndex = max(prev, 0)
+                    isDeceit = false
                     onQuestionChane.invoke()
                 }
                 ImageButton(
@@ -121,7 +136,10 @@ class MainActivity : ComponentActivity() {
                     imageId = R.drawable.baseline_keyboard_arrow_right_24,
                     reversed = true
                 ) {
-                    currentQuestionIndex++
+                    question.wasDecided = isDeceit
+                    val next = currentQuestionIndex + 1
+                    currentQuestionIndex = min(next, 9)
+                    isDeceit = false
                     onQuestionChane.invoke()
                 }
             }
@@ -132,10 +150,13 @@ class MainActivity : ComponentActivity() {
         super.onSaveInstanceState(outState)
         Log.d(TAG, "onSaveInstanceState")
         outState.putInt(QUESTION_NUMBER_KEY, currentQuestionIndex)
+        outState.putBoolean(WAS_DECIDED, isDeceit)
     }
 
-    private fun checkAnswer(context: Context, correctAnswer: Boolean, userAnswer: Boolean) {
-        if (correctAnswer == userAnswer)
+    private fun checkAnswer(context: Context, question: Question, userAnswer: Boolean) {
+        if (isDeceit || question.wasDecided)
+            makeToast(context, R.string.result_judgment)
+        else if (question.answer == userAnswer)
             makeToast(context, R.string.result_correct)
         else
             makeToast(context, R.string.result_incorrect)
@@ -145,6 +166,7 @@ class MainActivity : ComponentActivity() {
         super.onStart()
         Log.d(TAG, "onStart called")
     }
+
     override fun onPause() {
         super.onPause()
         Log.d(TAG, "onPause called")
@@ -165,8 +187,18 @@ class MainActivity : ComponentActivity() {
         Log.d(TAG, "onDestroy    called")
     }
 
+    private val startActivityForResult =
+        registerForActivityResult(StartActivityForResult()) {
+            if (it.resultCode == Activity.RESULT_OK) {
+                it.data?.let { data ->
+                    isDeceit = TakeInActivity.wasAnswerShown(data)
+                }
+            }
+        }
+
     companion object {
         private const val TAG = "MainActivity"
         private const val QUESTION_NUMBER_KEY = "QNK"
+        private const val WAS_DECIDED = "IDD"
     }
 }

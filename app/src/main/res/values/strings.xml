@@ -19,5 +19,11 @@
     <string name="question_8">Может ли быть несколько гугл аккаунтов на одном устройстве??</string>
     <string name="question_9">Возможно ли скачивать и устанавливать приложения не из Play Market?</string>
     <string name="question_10">Явлеяется ли ОС Андройд пердуставновленной системой IPhone?</string>
+
     <string name="title_activity_take_in">TakeInActivity</string>
+    <string name="takein_warning">Вы уверены, что хотите сделать это?</string>
+    <string name="takein_show_answer">Показать ответ</string>
+    <string name="answer_take_in">Обмануть!</string>
+    <string name="result_judgment">Обманывать нельзя.</string>
+
 </resources>
