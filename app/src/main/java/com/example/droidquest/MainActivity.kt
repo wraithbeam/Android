@@ -2,6 +2,7 @@ package com.example.droidquest
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.clickable
@@ -27,6 +28,8 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Log.d(TAG, "onCreate called")
+        currentQuestionIndex = savedInstanceState?.getInt(QUESTION_NUMBER_KEY, 0) ?: 0
         setContent {
             DroidQuestTheme {
                 Surface(
@@ -46,7 +49,13 @@ class MainActivity : ComponentActivity() {
             Question(R.string.question_2, false),
             Question(R.string.question_3, false),
             Question(R.string.question_4, true),
-            Question(R.string.question_5, true)
+            Question(R.string.question_5, true),
+            Question(R.string.question_5, true),
+            Question(R.string.question_6, true),
+            Question(R.string.question_7, true),
+            Question(R.string.question_8, true),
+            Question(R.string.question_9, true),
+            Question(R.string.question_10, false)
         )
         var question by remember { mutableStateOf(questions[currentQuestionIndex]) }
         drawQuestion(question = question) {
@@ -119,10 +128,45 @@ class MainActivity : ComponentActivity() {
         }
     }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        Log.d(TAG, "onSaveInstanceState")
+        outState.putInt(QUESTION_NUMBER_KEY, currentQuestionIndex)
+    }
+
     private fun checkAnswer(context: Context, correctAnswer: Boolean, userAnswer: Boolean) {
         if (correctAnswer == userAnswer)
             makeToast(context, R.string.result_correct)
         else
             makeToast(context, R.string.result_incorrect)
+    }
+
+    override fun onStart() {
+        super.onStart()
+        Log.d(TAG, "onStart called")
+    }
+    override fun onPause() {
+        super.onPause()
+        Log.d(TAG, "onPause called")
+    }
+
+    override fun onResume() {
+        super.onResume()
+        Log.d(TAG, "onResume called")
+    }
+
+    override fun onStop() {
+        super.onStop()
+        Log.d(TAG, "onStop called")
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Log.d(TAG, "onDestroy    called")
+    }
+
+    companion object {
+        private const val TAG = "MainActivity"
+        private const val QUESTION_NUMBER_KEY = "QNK"
     }
 }

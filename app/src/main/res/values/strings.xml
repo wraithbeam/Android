@@ -14,4 +14,10 @@
     <string name="question_3">>Компонент Android-приложения Service предоставляют доступ к данным?</string>
     <string name="question_4">Ресурсы приложения содержатся в отдельном файле XML?</string>
     <string name="question_5">AndroidManifest.xml предоставляет системе основную информацию о программе?</string>
+    <string name="question_6">Является ли исходный код ОС Андрйод общедоступным?</string>
+    <string name="question_7">Возможно ли кастомизировать интерфейс в ОС Андроид?</string>
+    <string name="question_8">Может ли быть несколько гугл аккаунтов на одном устройстве??</string>
+    <string name="question_9">Возможно ли скачивать и устанавливать приложения не из Play Market?</string>
+    <string name="question_10">Явлеяется ли ОС Андройд пердуставновленной системой IPhone?</string>
+    <string name="title_activity_take_in">TakeInActivity</string>
 </resources>
